@@ -1,0 +1,26 @@
+#!/bin/bash
+#** Check the ownership of joomla's configuration.php 
+#** If www-data then run lock.sh to secure files system
+#** If anything other then do nothing 
+#** By Eric Ragsdale
+#** June 25 2017
+#** Version 1.0
+#** Place file in /etc/cron.daily 
+#** change joompath to where your configuration.php is located /var/www/html
+#** change lockpath to where your lock.sh file is located
+#** 
+#** Set Varibles *************************************
+joompath = "/var/www/html"
+lockpath = "/var/www"
+
+
+cd $joompath
+owner=$(stat -c %U $joompath/configuration.php)
+echo $owner
+if [ "$owner" = "www-data" ]
+ then
+    echo "The owner is" .  $owner . ", run lock.sh"
+     $lockpath/lock.sh
+ else
+    echo Site is secure
+fi
